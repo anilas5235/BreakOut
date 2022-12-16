@@ -4,6 +4,7 @@ using UnityEngine;
 [CreateAssetMenu]
 public class Level : ScriptableObject
 {
+    public int numberOfAchievedStars;
     public int[] Row1 ;
     public int[] Row2 ;
     public int[] Row3 ;

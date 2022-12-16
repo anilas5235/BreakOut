@@ -9,28 +9,39 @@ using Random = UnityEngine.Random;
 
 public class BrickSpawner : MonoBehaviour
 {
+    public static BrickSpawner Instance;
     private float maxRangeY = 14.5f -1f, minRangeX = -10f,maxRangeX = 10f;
 
-    [SerializeField] private GameObject Brick;
+    [SerializeField] private GameObject Brick, bomb;
     private Color[] Colors = new Color[20];
     private float yexstence = 0.25f, xexstance = 0.75f;
-    [SerializeField] private Level[] _levels;
+    [SerializeField] public Level[] _levels;
 
     // Start is called before the first frame update
 
+    private void Awake()
+    {
+        Instance = this;
+    }
 
     public void SpawnBricks(int level)
     {
+        Brick[] lingeringBricks = FindObjectsOfType<Brick>();
+
+        for (int i = 0; i < lingeringBricks.Length; i++)
+        { Destroy(lingeringBricks[i].gameObject); }
+        
         if (level > _levels.Length ) {print("Spawn of Bricks failed- Level does not exist");  return; }
         SpawnRow(_levels[level].Row1,maxRangeY - 1 * (3 * yexstence ));
         SpawnRow(_levels[level].Row2,maxRangeY - 2 * (3 * yexstence ));
         SpawnRow(_levels[level].Row3,maxRangeY - 3 * (3 * yexstence ));
         SpawnRow(_levels[level].Row4,maxRangeY - 4 * (3 * yexstence ));
         SpawnRow(_levels[level].Row5,maxRangeY - 5 * (3 * yexstence ));
-        SpawnRow(_levels[level].Row7,maxRangeY - 6 * (3 * yexstence ));
-        SpawnRow(_levels[level].Row8,maxRangeY - 7 * (3 * yexstence ));
-        SpawnRow(_levels[level].Row9,maxRangeY - 8 * (3 * yexstence ));
-        SpawnRow(_levels[level].Row10,maxRangeY - 9 * (3 * yexstence ));
+        SpawnRow(_levels[level].Row6,maxRangeY - 6 * (3 * yexstence ));
+        SpawnRow(_levels[level].Row7,maxRangeY - 7 * (3 * yexstence ));
+        SpawnRow(_levels[level].Row8,maxRangeY - 8 * (3 * yexstence ));
+        SpawnRow(_levels[level].Row9,maxRangeY - 9 * (3 * yexstence ));
+        SpawnRow(_levels[level].Row10,maxRangeY - 10 * (3 * yexstence ));
     }
 
     private void SpawnRow(int[] Rowdata, float yValue)
@@ -45,7 +56,13 @@ public class BrickSpawner : MonoBehaviour
             switch (Rowdata[i])
             {
                 case 0:Instantiate(Brick, new Vector3(xForNextBrick, yValue, 0), quaternion.identity);  break;
+                case 1:Instantiate(bomb, new Vector3(xForNextBrick, yValue, 0), quaternion.identity);  break;
             }
         }
+    }
+    
+    public void UpdateStarsInData(int level, int stars)
+    {
+        _levels[level].numberOfAchievedStars = stars;
     }
 }

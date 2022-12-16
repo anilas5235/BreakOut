@@ -1,41 +1,49 @@
-using System;
-using System.Collections;
-using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
-using Random = UnityEngine.Random;
 
 public class Manager : MonoBehaviour
 {
     public int currentLevel = 0 ;
     private BrickSpawner BrickSpawner;
     private Ball Ball;
-    private int Fails ;
+    public int Fails ;
     private bool gamefinished = false;
     private TextMeshProUGUI LevelUI, FailsUI;
     private AudioSource levelaudio,failsound;
     public AudioClip finishsound;
+    public static Manager Instance;
+    public enum GameState
+    {
+        menu   = 0,
+        playing = 1,
+        win     = 2
+    }
+    public GameState CurrentGameState;
 
 
     private void Awake()
     {
+        Instance = this;
         Ball = FindObjectOfType<Ball>();
-        BrickSpawner = GameObject.FindObjectOfType<BrickSpawner>();
+        BrickSpawner = FindObjectOfType<BrickSpawner>();
         LevelUI = GameObject.Find("Level").GetComponent<TextMeshProUGUI>();
         FailsUI = GameObject.Find("Fails").GetComponent<TextMeshProUGUI>();
-        levelaudio = GameObject.Find("Globalsound").GetComponent<AudioSource>();
+        levelaudio = GameObject.Find("Backgroundmusic").GetComponent<AudioSource>();
         failsound = GameObject.Find("failsound").GetComponent<AudioSource>();
     }
 
     private void Start()
     {
-        currentLevel = 0;
-        LoadLevel();
+        CurrentGameState = GameState.menu;
+        LoadLevel(0);
+        FailsUI.text = "Fails : " + Fails;
     }
 
 
-    public void LoadLevel()
+    public void LoadLevel(int level)
     {
+        currentLevel = level;
+        Fails = 0;FailsUI.text = "Fails : " + Fails; 
         Ball.BallReset();
         print("currentLevel : "+currentLevel);
         BrickSpawner.SpawnBricks(currentLevel);
@@ -44,7 +52,15 @@ public class Manager : MonoBehaviour
 
     public void CheckLevelFinished()
     {
-        if (FindObjectOfType<Brick>() == null) {print("level finished ");levelaudio.PlayOneShot(finishsound); }
+        if (FindObjectOfType<Brick>() == null)
+        {
+            print("level finished ");
+            levelaudio.PlayOneShot(finishsound);Ball.BallReset();
+            UiManager.Instance.MenuChangeState(UiManager.Menu.Win);
+            if(5-Fails > BrickSpawner._levels[currentLevel].numberOfAchievedStars)
+            { BrickSpawner.Instance.UpdateStarsInData(currentLevel, 5-Fails);}
+            CurrentGameState = GameState.win;
+        }
     }
 
     public void InvokeCheckLevelFinished()
@@ -54,7 +70,7 @@ public class Manager : MonoBehaviour
 
     public void FailHappend()
     {
-        print("Fials +1 ");
+        print("Fails +1 ");
         Fails++;
         FailsUI.text = "Fails : " + Fails;
         failsound.Play();

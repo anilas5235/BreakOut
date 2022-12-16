@@ -14,7 +14,7 @@ GameObject:
   - component: {fileID: 5888925284949047691}
   m_Layer: 0
   m_Name: Brick
-  m_TagString: Untagged
+  m_TagString: Brick
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -97,6 +97,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   Explo: {fileID: 3749770521773545264, guid: 7a738cfd33055254eb697d7b94132bea, type: 3}
+  bigExplosion: {fileID: 5622839200768135100, guid: 2da6d2102476f6b429506f33cee49061, type: 3}
+  thisBrickType: 0
 --- !u!61 &5888925284949047691
 BoxCollider2D:
   m_ObjectHideFlags: 0

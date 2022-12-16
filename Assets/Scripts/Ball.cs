@@ -1,10 +1,11 @@
 using UnityEngine;
+using UnityEngine.Serialization;
 
 public class Ball : MonoBehaviour
 {
     public Rigidbody2D rb;
     private int startSpeed = 10;
-    public bool kichStart = true;
+    public bool kickStart = true;
     private GameObject player;
 
     private float currentSpeed ;
@@ -23,14 +24,14 @@ public class Ball : MonoBehaviour
 
     private void Update()
     {
-        if (kichStart && Input.GetKey(KeyCode.Space)) { transform.SetParent(null); rb.velocity = Vector2.up * startSpeed;  kichStart = false; }
+        if(Manager.Instance.CurrentGameState != Manager.GameState.playing){return;}
+        if (kickStart && Input.GetKey(KeyCode.Space)) { transform.SetParent(null); rb.velocity = Vector2.up * startSpeed;  kickStart = false; }
     }
 
     private void OnCollisionEnter2D(Collision2D col)
     {
         OnContactPointChange?.Invoke( col.GetContact(0).point);
-        currentSpeed *= 1.01f;
-        
+
         if (col.gameObject.CompareTag("Player"))
         {
             float hitDistance = transform.position.x - col.transform.position.x;
@@ -49,7 +50,7 @@ public class Ball : MonoBehaviour
         currentSpeed = startSpeed;
         transform.position = new Vector3(player.transform.position.x, player.transform.position.y + 1f, 0);
         transform.SetParent(player.transform);
-        kichStart = true;
+        kickStart = true;
     }
     
     public delegate void NewContactPoint(Vector3 lastContactPoint);
