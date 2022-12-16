@@ -542,6 +542,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   Brick: {fileID: 4118420163467928159, guid: 17fecb2d99b6cc74e95190f253b064c6, type: 3}
+  _levels:
+  - {fileID: 11400000, guid: 047d91c9c73b767419e2dbed27702a03, type: 2}
 --- !u!4 &531503521
 Transform:
   m_ObjectHideFlags: 0
@@ -888,8 +890,8 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 1187, y: 1334}
-  m_SizeDelta: {x: 600, y: 300}
+  m_AnchoredPosition: {x: 1130, y: 1420}
+  m_SizeDelta: {x: 750, y: 160}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1160834207
 MonoBehaviour:
@@ -974,7 +976,7 @@ MonoBehaviour:
   m_VertexBufferAutoSizeReduction: 0
   m_useMaxVisibleDescender: 1
   m_pageToDisplay: 1
-  m_margin: {x: 0, y: 0, z: 0, w: 0}
+  m_margin: {x: 0, y: 0, z: 0, w: 7.0239563}
   m_isUsingLegacyAnimationComponent: 0
   m_isVolumetricText: 0
   m_hasFontAssetChanged: 0
@@ -1022,8 +1024,8 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: -1186, y: 1334}
-  m_SizeDelta: {x: 600, y: 300}
+  m_AnchoredPosition: {x: -1128, y: 1420}
+  m_SizeDelta: {x: 750, y: 160}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1455685678
 MonoBehaviour:

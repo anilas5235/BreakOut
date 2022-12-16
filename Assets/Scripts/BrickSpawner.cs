@@ -9,66 +9,43 @@ using Random = UnityEngine.Random;
 
 public class BrickSpawner : MonoBehaviour
 {
-    private float maxRangeY = 14.5f, minRangeX = -10f,maxRangeX = 10f;
+    private float maxRangeY = 14.5f -1f, minRangeX = -10f,maxRangeX = 10f;
 
     [SerializeField] private GameObject Brick;
     private Color[] Colors = new Color[20];
-    private float yexstence = 0.25f, xexstance = 0.5f;
+    private float yexstence = 0.25f, xexstance = 0.75f;
+    [SerializeField] private Level[] _levels;
 
-    private GameObject[,] Bricks;
     // Start is called before the first frame update
-   
 
-    public void SpawnBricks(int RowSice , int CollumeNumber)
+
+    public void SpawnBricks(int level)
     {
-        if (RowSice<1 || CollumeNumber < 1) {return; }
-        if (RowSice > 15) { RowSice = 15; }
-        if (CollumeNumber > 20) { CollumeNumber = 20; }
+        if (level > _levels.Length ) {print("Spawn of Bricks failed- Level does not exist");  return; }
+        SpawnRow(_levels[level].Row1,maxRangeY - 1 * (3 * yexstence ));
+        SpawnRow(_levels[level].Row2,maxRangeY - 2 * (3 * yexstence ));
+        SpawnRow(_levels[level].Row3,maxRangeY - 3 * (3 * yexstence ));
+        SpawnRow(_levels[level].Row4,maxRangeY - 4 * (3 * yexstence ));
+        SpawnRow(_levels[level].Row5,maxRangeY - 5 * (3 * yexstence ));
+        SpawnRow(_levels[level].Row7,maxRangeY - 6 * (3 * yexstence ));
+        SpawnRow(_levels[level].Row8,maxRangeY - 7 * (3 * yexstence ));
+        SpawnRow(_levels[level].Row9,maxRangeY - 8 * (3 * yexstence ));
+        SpawnRow(_levels[level].Row10,maxRangeY - 9 * (3 * yexstence ));
+    }
 
-        for (int i = 0; i < CollumeNumber; i++)
+    private void SpawnRow(int[] Rowdata, float yValue)
+    {
+        if(Rowdata.Length < 1){return; }
+        int Rowleangth = Rowdata.Length -1;
+        float XSpaceBetweenBricks = ((maxRangeX - minRangeX) - (Rowleangth * xexstance*2) )/(Rowleangth+1); 
+
+        for (int i = 0; i < Rowdata.Length-1; i++)
         {
-            Colors[i] = new Color(Random.Range(0f, 1f), Random.Range(0f, 1f), Random.Range(0f, 1f), Random.Range(0f, 1f));
-        }
-        
-       
-        Bricks = new GameObject[RowSice, CollumeNumber];
-        float XSpaceBetweenBRicks = ((maxRangeX - minRangeX) - RowSice)/(RowSice+1); 
-        for (int i = 0; i < CollumeNumber; i++)
-        {
-            float yForNextBrick = maxRangeY - (i + 1) * (2* yexstence *1.5f);
-            for (int j = 0; j < RowSice; j++)
+            float xForNextBrick = xexstance + XSpaceBetweenBricks+ minRangeX +  i * (xexstance*2 + XSpaceBetweenBricks);
+            switch (Rowdata[i])
             {
-                float xForNextBrick = xexstance + XSpaceBetweenBRicks+ minRangeX +  j * (xexstance*2 + XSpaceBetweenBRicks);
-                Bricks[j,i] = Instantiate(Brick, new Vector3(xForNextBrick, yForNextBrick, 0), quaternion.identity);
-                Bricks[j,i].gameObject.GetComponent<SpriteRenderer>().color = Colors[i];
+                case 0:Instantiate(Brick, new Vector3(xForNextBrick, yValue, 0), quaternion.identity);  break;
             }
         }
     }
-
-    /*private void OnDrawGizmos()
-    {
-        int RowSice = 10 , CollumeNumber = 13;
-        if (RowSice<1 || CollumeNumber < 1) {return; }
-        if (RowSice > 11) { RowSice = 11; }
-        if (CollumeNumber > 20) { CollumeNumber = 20; }
-
-        for (int i = 0; i < CollumeNumber; i++)
-        {
-            Colors[i] = new Color(Random.Range(0f, 1f), Random.Range(0f, 1f), Random.Range(0f, 1f), Random.Range(0f, 1f));
-        }
-        
-       
-        Bricks = new GameObject[RowSice, CollumeNumber];
-        float XSpaceBetweenBRicks = ((maxRangeX - minRangeX) - RowSice)/(RowSice+1); 
-        for (int i = 0; i < CollumeNumber; i++)
-        {
-            float yForNextBrick = maxRangeY - (i + 1) * ( yexstence *1.5f);
-            for (int j = 0; j < RowSice; j++)
-            {
-                float xForNextBrick = xexstance + XSpaceBetweenBRicks+ minRangeX +  j * (1f + XSpaceBetweenBRicks);
-               Gizmos.DrawCube(  new Vector3(xForNextBrick, yForNextBrick, 0), new Vector3(xexstance*2,yexstence*2,1f));
-                
-            }
-        }
-    }*/
 }

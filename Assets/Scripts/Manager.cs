@@ -7,15 +7,15 @@ using Random = UnityEngine.Random;
 
 public class Manager : MonoBehaviour
 {
-    private Vector2[] Levels = new Vector2[20];
-    public int currentLevel = -1;
+    public int currentLevel = 0 ;
     private BrickSpawner BrickSpawner;
     private Ball Ball;
-    private int Fails = -1;
+    private int Fails ;
     private bool gamefinished = false;
     private TextMeshProUGUI LevelUI, FailsUI;
     private AudioSource levelaudio,failsound;
-    public AudioClip finishsound; 
+    public AudioClip finishsound;
+
 
     private void Awake()
     {
@@ -29,29 +29,22 @@ public class Manager : MonoBehaviour
 
     private void Start()
     {
-        Levels[0] = new Vector2(5, 5);
-        for (int i = 1; i < Levels.Length; i++)
-        {
-            Levels[i] = Levels[i - 1] + new Vector2(Random.Range(0,3), Random.Range(0,3) );
-        }
-        NextLevel(); FailHappend();
+        currentLevel = 0;
+        LoadLevel();
     }
 
 
-    public void NextLevel()
+    public void LoadLevel()
     {
-        if(gamefinished){return;}
         Ball.BallReset();
-        currentLevel++;
-        levelaudio.PlayOneShot(finishsound);
-        if (currentLevel >= Levels.Length) { gamefinished = true; } print("currentLevel : "+currentLevel);
-        BrickSpawner.SpawnBricks( (int)Levels[currentLevel].x,  (int)Levels[currentLevel].y);
+        print("currentLevel : "+currentLevel);
+        BrickSpawner.SpawnBricks(currentLevel);
         LevelUI.text = "Level : " + currentLevel;
     }
 
     public void CheckLevelFinished()
     {
-        if (FindObjectOfType<Brick>() == null) {print("level finished "); NextLevel(); }
+        if (FindObjectOfType<Brick>() == null) {print("level finished ");levelaudio.PlayOneShot(finishsound); }
     }
 
     public void InvokeCheckLevelFinished()

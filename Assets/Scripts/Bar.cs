@@ -5,7 +5,7 @@ using UnityEngine;
 
 public class Bar : MonoBehaviour
 {
-   public float moveSpeed = 6;
+   public float moveSpeed = 7;
    private Rigidbody2D rb;
 
    private void Start()
