@@ -1,3 +1,4 @@
+using System.Collections;
 using TMPro;
 using UnityEngine;
 
@@ -7,7 +8,6 @@ public class Manager : MonoBehaviour
     private BrickSpawner BrickSpawner;
     private Ball Ball;
     public int Fails ;
-    private bool gamefinished = false;
     private TextMeshProUGUI LevelUI, FailsUI;
     private AudioSource levelaudio,failsound;
     public AudioClip finishsound;
@@ -35,7 +35,6 @@ public class Manager : MonoBehaviour
     private void Start()
     {
         CurrentGameState = GameState.menu;
-        LoadLevel(0);
         FailsUI.text = "Fails : " + Fails;
     }
 
@@ -44,7 +43,7 @@ public class Manager : MonoBehaviour
     {
         currentLevel = level;
         Fails = 0;FailsUI.text = "Fails : " + Fails; 
-        Ball.BallReset();
+        Ball.BallReset(); Ball.PlayerReset();
         print("currentLevel : "+currentLevel);
         BrickSpawner.SpawnBricks(currentLevel);
         LevelUI.text = "Level : " + currentLevel;
@@ -75,4 +74,13 @@ public class Manager : MonoBehaviour
         FailsUI.text = "Fails : " + Fails;
         failsound.Play();
     }
+
+    public IEnumerator ReckingBallPowerUp()
+    {
+        Ball.transform.localScale *= 2;
+        yield return new WaitForSeconds(10f);
+        Ball.transform.localScale *= 1/2f;
+    }
+
+    
 }

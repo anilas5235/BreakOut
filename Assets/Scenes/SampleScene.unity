@@ -242,6 +242,7 @@ MonoBehaviour:
   levelOfLevelSelect:
   - {fileID: 311319177}
   - {fileID: 56422960}
+  - {fileID: 1616091569}
   winMessage: {fileID: 59395162}
   OptionsSave: {fileID: 11400000, guid: d5df4d812d4488244bc6aa01019c7bf6, type: 2}
   CurrMenu: 0
@@ -3087,8 +3088,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a47239127a7d45741b378351dbc3d4f2, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  Brick: {fileID: 4118420163467928159, guid: 17fecb2d99b6cc74e95190f253b064c6, type: 3}
-  bomb: {fileID: 8625837723458362863, guid: 355e3c77ffe6c5f4d9674929ad070ea9, type: 3}
+  Bricktypes:
+  - {fileID: 4118420163467928159, guid: 17fecb2d99b6cc74e95190f253b064c6, type: 3}
+  - {fileID: 8625837723458362863, guid: 355e3c77ffe6c5f4d9674929ad070ea9, type: 3}
+  - {fileID: 1795803751687591729, guid: d5f67af8ce9dad64c82092a3056e758b, type: 3}
   _levels:
   - {fileID: 11400000, guid: 047d91c9c73b767419e2dbed27702a03, type: 2}
   - {fileID: 11400000, guid: 9d21aa436a01dba47b13cc32923b97a0, type: 2}

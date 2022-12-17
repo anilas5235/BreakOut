@@ -52,6 +52,11 @@ public class Ball : MonoBehaviour
         transform.SetParent(player.transform);
         kickStart = true;
     }
+
+    public void PlayerReset()
+    {
+        player.transform.position = new Vector3(0, -4, 0);
+    }
     
     public delegate void NewContactPoint(Vector3 lastContactPoint);
     public event NewContactPoint OnContactPointChange; 

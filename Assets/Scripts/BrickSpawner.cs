@@ -12,7 +12,7 @@ public class BrickSpawner : MonoBehaviour
     public static BrickSpawner Instance;
     private float maxRangeY = 14.5f -1f, minRangeX = -10f,maxRangeX = 10f;
 
-    [SerializeField] private GameObject Brick, bomb;
+    [SerializeField] private GameObject[] Bricktypes;
     private Color[] Colors = new Color[20];
     private float yexstence = 0.25f, xexstance = 0.75f;
     [SerializeField] public Level[] _levels;
@@ -55,8 +55,9 @@ public class BrickSpawner : MonoBehaviour
             float xForNextBrick = xexstance + XSpaceBetweenBricks+ minRangeX +  i * (xexstance*2 + XSpaceBetweenBricks);
             switch (Rowdata[i])
             {
-                case 0:Instantiate(Brick, new Vector3(xForNextBrick, yValue, 0), quaternion.identity);  break;
-                case 1:Instantiate(bomb, new Vector3(xForNextBrick, yValue, 0), quaternion.identity);  break;
+                case 0:Instantiate(Bricktypes[0], new Vector3(xForNextBrick, yValue, 0), quaternion.identity);  break;
+                case 1:Instantiate(Bricktypes[1], new Vector3(xForNextBrick, yValue, 0), quaternion.identity);  break;
+                case 2:Instantiate(Bricktypes[2], new Vector3(xForNextBrick, yValue, 0), quaternion.identity);  break;
             }
         }
     }

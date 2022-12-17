@@ -65,7 +65,7 @@ public class UiManager : MonoBehaviour
         switch (CurrMenu)
         {
             case Menu.None: break;
-            case Menu.StartScreen: startScreenController.SetActive(false); break;
+            case Menu.StartScreen: startScreenController.SetActive(false);  break;
             case Menu.AudioOptions: saveOptions(); audioOptionsController.SetActive(false); break;
             case Menu.LevelSelect: levelSelectController.SetActive(false); break;
             case Menu.Pause: break;
@@ -76,10 +76,10 @@ public class UiManager : MonoBehaviour
         
         switch (CurrMenu)
         {
-            case Menu.None: break;
-            case Menu.StartScreen: startScreenController.SetActive(true); Manager.Instance.CurrentGameState = Manager.GameState.menu; break;
+            case Menu.None: ; break;
+            case Menu.StartScreen: startScreenController.SetActive(true); Manager.Instance.CurrentGameState = Manager.GameState.menu;LoadLevel(0); break;
             case Menu.AudioOptions: audioOptionsController.SetActive(true);Manager.Instance.CurrentGameState = Manager.GameState.menu; break;
-            case Menu.LevelSelect: levelSelectController.SetActive(true); UpdateLevelSelectStars();
+            case Menu.LevelSelect: levelSelectController.SetActive(true);  UpdateLevelSelectStars();
                 Manager.Instance.CurrentGameState = Manager.GameState.menu; break;
             case Menu.Pause: break;
             case Menu.Win: winScreenController.SetActive(true); winMessage.text = "You achieved " + (5 - Manager.Instance.Fails) + " Stars"; 
@@ -128,9 +128,14 @@ public class UiManager : MonoBehaviour
 
     public void LoadLevel(int level)
     {
-        MenuChangeState(Menu.None);
-        Manager.Instance.LoadLevel(level);
-        Manager.Instance.CurrentGameState = Manager.GameState.playing;
+        if(level ==0){Manager.Instance.LoadLevel(level); }
+        else
+        {
+            MenuChangeState(Menu.None);
+            Manager.Instance.LoadLevel(level);
+            Manager.Instance.CurrentGameState = Manager.GameState.playing;
+        }
+
     }
 
     public void UpdateStars(int level, int stars)

@@ -12,6 +12,7 @@ public class Brick : MonoBehaviour
     {
         Normal =0,
         Bomb =1,
+        Recking =2,
     }
     public BrickType thisBrickType;
     private void Awake()
@@ -30,21 +31,23 @@ public class Brick : MonoBehaviour
                 break;
             case BrickType.Bomb:
                 Instantiate(bigExplosion, transform.position, quaternion.identity);
+                
                 Collider2D[] hitBricks = Physics2D.OverlapCircleAll(transform.position, 3f);
+                
                 for (int i = 0; i < hitBricks.Length; i++)
                 {
-                    if (!hitBricks[i].CompareTag("Brick")) { continue; }
-                    hitBricks[i].GetComponent<Brick>().BrickIsHit();
+                    if (hitBricks[i].gameObject.CompareTag("Brick") && hitBricks[i].gameObject != gameObject)
+                    {
+                        hitBricks[i].gameObject.GetComponent<Brick>().BrickIsHit();
+                    }
                 }
 
                 break;
-            default:
-                throw new ArgumentOutOfRangeException();
+            case BrickType.Recking: Manager.ReckingBallPowerUp();  break;
+            default: print("this Brick is not defined"); break;
+                
         }
-
-        
-        
         Manager.InvokeCheckLevelFinished();
-        Destroy(this.gameObject);
+        Destroy(gameObject);
     }
 }
