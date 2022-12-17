@@ -44,20 +44,24 @@ public class BrickSpawner : MonoBehaviour
         SpawnRow(_levels[level].Row10,maxRangeY - 10 * (3 * yexstence ));
     }
 
-    private void SpawnRow(int[] Rowdata, float yValue)
+    private void SpawnRow(int[] rowdata, float yValue)
     {
-        if(Rowdata.Length < 1){return; }
-        int Rowleangth = Rowdata.Length -1;
+        if(rowdata.Length < 1){return; }
+        int Rowleangth = rowdata.Length;
         float XSpaceBetweenBricks = ((maxRangeX - minRangeX) - (Rowleangth * xexstance*2) )/(Rowleangth+1); 
 
-        for (int i = 0; i < Rowdata.Length-1; i++)
+        for (int i = 0; i < rowdata.Length; i++)
         {
             float xForNextBrick = xexstance + XSpaceBetweenBricks+ minRangeX +  i * (xexstance*2 + XSpaceBetweenBricks);
-            switch (Rowdata[i])
+            switch (rowdata[i])
             {
                 case 0:Instantiate(Bricktypes[0], new Vector3(xForNextBrick, yValue, 0), quaternion.identity);  break;
                 case 1:Instantiate(Bricktypes[1], new Vector3(xForNextBrick, yValue, 0), quaternion.identity);  break;
                 case 2:Instantiate(Bricktypes[2], new Vector3(xForNextBrick, yValue, 0), quaternion.identity);  break;
+                case 3:Instantiate(Bricktypes[3], new Vector3(xForNextBrick, yValue, 0), quaternion.identity);  break;
+                case 4:Instantiate(Bricktypes[4], new Vector3(xForNextBrick, yValue, 0), quaternion.identity);  break;
+                case 5:Instantiate(Bricktypes[5], new Vector3(xForNextBrick, yValue, 0), quaternion.identity);  break;
+                
             }
         }
     }

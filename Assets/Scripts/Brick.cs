@@ -10,9 +10,7 @@ public class Brick : MonoBehaviour
     [SerializeField] private GameObject Explo, bigExplosion;
     public enum BrickType
     {
-        Normal =0,
-        Bomb =1,
-        Recking =2,
+        Normal =0, Bomb =1, Recking =2, SpeedBall =3, SpeedPlayer =4, GiantPlayer =5,
     }
     public BrickType thisBrickType;
     private void Awake()
@@ -27,27 +25,30 @@ public class Brick : MonoBehaviour
     {
         switch (thisBrickType)
         {
-            case BrickType.Normal:Instantiate(Explo, transform.position, quaternion.identity);
-                break;
-            case BrickType.Bomb:
-                Instantiate(bigExplosion, transform.position, quaternion.identity);
-                
-                Collider2D[] hitBricks = Physics2D.OverlapCircleAll(transform.position, 3f);
-                
-                for (int i = 0; i < hitBricks.Length; i++)
-                {
-                    if (hitBricks[i].gameObject.CompareTag("Brick") && hitBricks[i].gameObject != gameObject)
-                    {
-                        hitBricks[i].gameObject.GetComponent<Brick>().BrickIsHit();
-                    }
-                }
-
-                break;
-            case BrickType.Recking: Manager.ReckingBallPowerUp();  break;
+            case BrickType.Normal: break;
+            case BrickType.Bomb: Explosion(); break;
+            case BrickType.Recking: Manager.TriggerReckingBallPower();  break;
+            case BrickType.SpeedBall: Manager.TriggerSpeedBallPower(); break;
+            case BrickType.SpeedPlayer: Manager.TriggerSpeedPlayerPower(); break;
+            case BrickType.GiantPlayer: Manager.TriggerGiantPlayerPower(); break;
             default: print("this Brick is not defined"); break;
-                
         }
+        Instantiate(Explo, transform.position, quaternion.identity);
         Manager.InvokeCheckLevelFinished();
         Destroy(gameObject);
+    }
+
+    private void Explosion()
+    {
+        Instantiate(bigExplosion, transform.position, quaternion.identity);
+        Collider2D[] hitBricks = Physics2D.OverlapCircleAll(transform.position, 2f);
+
+        for (int i = 0; i < hitBricks.Length; i++)
+        {
+            if (hitBricks[i].gameObject.CompareTag("Brick") && hitBricks[i].gameObject != gameObject)
+            {
+                hitBricks[i].gameObject.GetComponent<Brick>().BrickIsHit();
+            }
+        }
     }
 }

@@ -77,10 +77,10 @@ public class UiManager : MonoBehaviour
         switch (CurrMenu)
         {
             case Menu.None: ; break;
-            case Menu.StartScreen: startScreenController.SetActive(true); Manager.Instance.CurrentGameState = Manager.GameState.menu;LoadLevel(0); break;
-            case Menu.AudioOptions: audioOptionsController.SetActive(true);Manager.Instance.CurrentGameState = Manager.GameState.menu; break;
+            case Menu.StartScreen: startScreenController.SetActive(true); Manager.Instance.currentGameState = Manager.GameState.Menu;LoadLevel(0); break;
+            case Menu.AudioOptions: audioOptionsController.SetActive(true);Manager.Instance.currentGameState = Manager.GameState.Menu; break;
             case Menu.LevelSelect: levelSelectController.SetActive(true);  UpdateLevelSelectStars();
-                Manager.Instance.CurrentGameState = Manager.GameState.menu; break;
+                Manager.Instance.currentGameState = Manager.GameState.Menu; break;
             case Menu.Pause: break;
             case Menu.Win: winScreenController.SetActive(true); winMessage.text = "You achieved " + (5 - Manager.Instance.Fails) + " Stars"; 
                 UpdateStars(-1,(5 - Manager.Instance.Fails));
@@ -133,7 +133,7 @@ public class UiManager : MonoBehaviour
         {
             MenuChangeState(Menu.None);
             Manager.Instance.LoadLevel(level);
-            Manager.Instance.CurrentGameState = Manager.GameState.playing;
+            Manager.Instance.currentGameState = Manager.GameState.Playing;
         }
 
     }

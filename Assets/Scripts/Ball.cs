@@ -4,11 +4,11 @@ using UnityEngine.Serialization;
 public class Ball : MonoBehaviour
 {
     public Rigidbody2D rb;
-    private int startSpeed = 10;
+    public float startSpeed = 10;
     public bool kickStart = true;
     private GameObject player;
 
-    private float currentSpeed ;
+    public float speedMultiplier = 1;
     
 
     private void Awake()
@@ -24,8 +24,9 @@ public class Ball : MonoBehaviour
 
     private void Update()
     {
-        if(Manager.Instance.CurrentGameState != Manager.GameState.playing){return;}
-        if (kickStart && Input.GetKey(KeyCode.Space)) { transform.SetParent(null); rb.velocity = Vector2.up * startSpeed;  kickStart = false; }
+        if(Manager.Instance.currentGameState != Manager.GameState.Playing){return;}
+        if (kickStart && Input.GetKey(KeyCode.Space))
+        { transform.SetParent(null); rb.velocity = Vector2.up * (startSpeed * speedMultiplier);  kickStart = false; }
     }
 
     private void OnCollisionEnter2D(Collision2D col)
@@ -41,13 +42,12 @@ public class Ball : MonoBehaviour
             rb.velocity = new Vector2(Mathf.Abs(normalizedHitDistance) * (rb.velocity.x/Mathf.Abs(rb.velocity.x)),rb.velocity.y/Mathf.Abs(rb.velocity.y));
         }
         
-        rb.velocity = rb.velocity.normalized * currentSpeed;
+        rb.velocity = rb.velocity.normalized * startSpeed * speedMultiplier;
     }
 
     public void BallReset()
     {
         rb.velocity = Vector2.zero;
-        currentSpeed = startSpeed;
         transform.position = new Vector3(player.transform.position.x, player.transform.position.y + 1f, 0);
         transform.SetParent(player.transform);
         kickStart = true;
