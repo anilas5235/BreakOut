@@ -14,7 +14,6 @@ public class UiManager : MonoBehaviour
     [SerializeField] private AudioMixer mainAudioMixer;
     [SerializeField] private Slider main, music, sfx, others;
     [SerializeField] private GameObject startScreenController, audioOptionsController, levelSelectController, winScreenController, pauseScreenController,tipsController;
-    [SerializeField] private AudioSource musicSource, sfxSource, othersSource;
     [SerializeField] private GameObject[] levelOfLevelSelect;
     [SerializeField] private TextMeshProUGUI winMessage, pauseMessage;
     [SerializeField] public OptionsSave OptionsSave;
@@ -41,7 +40,9 @@ public class UiManager : MonoBehaviour
     {
         BrickSpawner = BrickSpawner.Instance;
         MenuChangeState(Menu.StartScreen);
-        LoadOptions();
+        LoadFromSaveText();
+        LoadOptionsFormObject();
+        UpdateSoundOptions();
     }
 
 
@@ -66,7 +67,7 @@ public class UiManager : MonoBehaviour
         {
             case Menu.None: break;
             case Menu.StartScreen: startScreenController.SetActive(false);  break;
-            case Menu.AudioOptions: saveOptions(); audioOptionsController.SetActive(false); break;
+            case Menu.AudioOptions: SaveOptionsInObject(); audioOptionsController.SetActive(false); break;
             case Menu.LevelSelect: levelSelectController.SetActive(false); break;
             case Menu.Pause: pauseScreenController.SetActive(false); break;
             case Menu.Win: winScreenController.SetActive(false); break;
@@ -103,6 +104,7 @@ public class UiManager : MonoBehaviour
     public void ChangeStartScreen()
     {
         MenuChangeState(Menu.StartScreen);
+        Time.timeScale = 1;
     }
     
     public void ChangeToLevelSelection()
@@ -113,23 +115,26 @@ public class UiManager : MonoBehaviour
 
     private void UpdateSoundOptions()
     {
-        musicSource.volume = music.value;
-        sfxSource.volume = sfx.value;
-        othersSource.volume = others.value;
+        mainAudioMixer.SetFloat("Master_Volume", main.value);
+        mainAudioMixer.SetFloat("SFX_Volume", sfx.value);
+        mainAudioMixer.SetFloat("Music_Volume", music.value);
+        mainAudioMixer.SetFloat("Other_Volume", others.value);
     }
 
-    private void LoadOptions()
+    private void LoadOptionsFormObject()
     {
-        musicSource.volume = music.value = OptionsSave.faderSettingsAudio[0]; ;
-        sfxSource.volume = sfx.value = OptionsSave.faderSettingsAudio[1];
-        othersSource.volume = others.value = OptionsSave.faderSettingsAudio[2];
+       main.value =  OptionsSave.faderSettingsAudio[0];
+       sfx.value =  OptionsSave.faderSettingsAudio[1];
+       music.value = OptionsSave.faderSettingsAudio[2]; 
+       others.value =  OptionsSave.faderSettingsAudio[3];
     }
 
-    private void saveOptions()
+    private void SaveOptionsInObject()
     {
-        OptionsSave.faderSettingsAudio[0] =music.value;
-        OptionsSave.faderSettingsAudio[1]=sfx.value ;
-        OptionsSave.faderSettingsAudio[2]=others.value ;
+        mainAudioMixer.GetFloat("Master_Volume", out OptionsSave.faderSettingsAudio[0]) ;
+        mainAudioMixer.GetFloat("SFX_Volume", out OptionsSave.faderSettingsAudio[1]) ;
+        mainAudioMixer.GetFloat("Music_Volume", out OptionsSave.faderSettingsAudio[2]) ;
+        mainAudioMixer.GetFloat("Other_Volume", out OptionsSave.faderSettingsAudio[3]) ;
     }
 
     public void LoadLevel(int level)
@@ -174,7 +179,30 @@ public class UiManager : MonoBehaviour
         LoadLevel(Manager.Instance.currentLevel);
     }
 
-    public void CloseGame() { Application.Quit(); }
+    public void CloseGame()
+    {
+        for (int i = 0; i < levelOfLevelSelect.Length; i++)
+        {
+            SaveSystem.instance.GetActiveSave().achievedStarsInLevels[i] = BrickSpawner.Instance._levels[i].numberOfAchievedStars;
+        }
+        for (int i = 0; i < OptionsSave.faderSettingsAudio.Length; i++)
+        {
+            SaveSystem.instance.GetActiveSave().audioOptions[i] = OptionsSave.faderSettingsAudio[i];
+        }
+        Application.Quit();
+    }
+
+    private void LoadFromSaveText()
+    {
+        for (int i = 0; i < levelOfLevelSelect.Length; i++)
+        {
+             BrickSpawner.Instance._levels[i].numberOfAchievedStars = SaveSystem.instance.GetActiveSave().achievedStarsInLevels[i];
+        }
+        for (int i = 0; i < OptionsSave.faderSettingsAudio.Length; i++)
+        {
+             OptionsSave.faderSettingsAudio[i] =SaveSystem.instance.GetActiveSave().audioOptions[i];
+        }
+    }
 
     public void ToggleTips(bool newState) { tipsController.SetActive(newState); }
     

@@ -13,6 +13,7 @@ MonoBehaviour:
   m_Name: Options Save
   m_EditorClassIdentifier: 
   faderSettingsAudio:
-  - 0.13741848
-  - 0.5673366
-  - 0.8056045
+  - -3.2223427
+  - -5.8002114
+  - -13.319008
+  - -5
