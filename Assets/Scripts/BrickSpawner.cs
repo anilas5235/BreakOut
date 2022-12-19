@@ -70,4 +70,6 @@ public class BrickSpawner : MonoBehaviour
     {
         _levels[level].numberOfAchievedStars = stars;
     }
+    
+    public void RestAllStarsData() { for (int i = 0; i < _levels.Length; i++) { _levels[i].numberOfAchievedStars = 0; } }
 }

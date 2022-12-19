@@ -6,19 +6,12 @@ public class Ball : MonoBehaviour
     public Rigidbody2D rb;
     public float startSpeed = 10;
     public bool kickStart = true;
-    private GameObject player;
+    [SerializeField] private GameObject player;
 
     public float speedMultiplier = 1;
     
-
-    private void Awake()
-    {
-        rb = GetComponent<Rigidbody2D>();
-    }
-
     private void Start()
     {
-        player = GameObject.FindWithTag("Player");
         BallReset();
     }
 
@@ -26,7 +19,7 @@ public class Ball : MonoBehaviour
     {
         if(Manager.Instance.currentGameState != Manager.GameState.Playing){return;}
         if (kickStart && Input.GetKey(KeyCode.Space))
-        { transform.SetParent(null); rb.velocity = Vector2.up * (startSpeed * speedMultiplier);  kickStart = false; }
+        { transform.SetParent(null); rb.velocity = Vector2.up * (startSpeed * speedMultiplier);  kickStart = false; UiManager.Instance.ToggleTips(false); }
     }
 
     private void OnCollisionEnter2D(Collision2D col)
@@ -59,5 +52,4 @@ public class Ball : MonoBehaviour
     }
     
     public delegate void NewContactPoint(Vector3 lastContactPoint);
-    public event NewContactPoint OnContactPointChange; 
-}
+    public event NewContactPoint OnContactPointChange; }

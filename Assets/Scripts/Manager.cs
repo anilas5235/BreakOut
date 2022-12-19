@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using TMPro;
 using UnityEngine;
@@ -17,7 +18,7 @@ public class Manager : MonoBehaviour
     private SpriteRenderer spriteRendererPlayer, spriteRendererBall;
     public enum GameState
     {
-        Menu   = 0, Playing = 1, Win = 2
+        Menu   = 0, Playing = 1, Win = 2, Pause =3,
     }
     public GameState currentGameState;
 
@@ -42,15 +43,26 @@ public class Manager : MonoBehaviour
         FailsUI.text = "Fails : " + Fails;
     }
 
+    private void Update()
+    {
+        if (currentGameState == GameState.Playing)
+        {
+            if (Input.GetKeyDown(KeyCode.Escape))
+            {
+                PauseGame();
+            }
+        }
+    }
+
 
     public void LoadLevel(int level)
     {
         currentLevel = level;
         Fails = 0;FailsUI.text = "Fails : " + Fails; 
         Ball.BallReset(); Ball.PlayerReset();
-        print("currentLevel : "+currentLevel);
         BrickSpawner.SpawnBricks(currentLevel);
         LevelUI.text = "Level : " + currentLevel;
+        if(level > 0){UiManager.Instance.ToggleTips(true);}
     }
 
     public void CheckLevelFinished()
@@ -73,7 +85,6 @@ public class Manager : MonoBehaviour
 
     public void FailHappend()
     {
-        print("Fails +1 ");
         Fails++;
         FailsUI.text = "Fails : " + Fails;
         failsound.Play();
@@ -128,4 +139,20 @@ public class Manager : MonoBehaviour
         if(speedPlayerStackCounter < 1 && giantPlayerStackCounter < 1){spriteRendererPlayer.color = Color.white;}
         T.localScale *= 1/2f;
     }
+
+    private void PauseGame()
+    {
+        currentGameState = GameState.Pause;
+        UiManager.Instance.MenuChangeState(UiManager.Menu.Pause);
+        Time.timeScale = 0;
+        
+    }
+
+    public void ResumeGame()
+    {
+        Time.timeScale = 1;
+        currentGameState = GameState.Playing;
+        UiManager.Instance.MenuChangeState(UiManager.Menu.None);
+    }
+
 }

@@ -13,10 +13,10 @@ public class UiManager : MonoBehaviour
 
     [SerializeField] private AudioMixer mainAudioMixer;
     [SerializeField] private Slider main, music, sfx, others;
-    [SerializeField] private GameObject startScreenController, audioOptionsController, levelSelectController, winScreenController;
+    [SerializeField] private GameObject startScreenController, audioOptionsController, levelSelectController, winScreenController, pauseScreenController,tipsController;
     [SerializeField] private AudioSource musicSource, sfxSource, othersSource;
     [SerializeField] private GameObject[] levelOfLevelSelect;
-    [SerializeField] private TextMeshProUGUI winMessage;
+    [SerializeField] private TextMeshProUGUI winMessage, pauseMessage;
     [SerializeField] public OptionsSave OptionsSave;
     private BrickSpawner BrickSpawner;
     public enum Menu
@@ -68,7 +68,7 @@ public class UiManager : MonoBehaviour
             case Menu.StartScreen: startScreenController.SetActive(false);  break;
             case Menu.AudioOptions: saveOptions(); audioOptionsController.SetActive(false); break;
             case Menu.LevelSelect: levelSelectController.SetActive(false); break;
-            case Menu.Pause: break;
+            case Menu.Pause: pauseScreenController.SetActive(false); break;
             case Menu.Win: winScreenController.SetActive(false); break;
             default: print(" Error, GameState does not exist");break;
         }
@@ -77,14 +77,20 @@ public class UiManager : MonoBehaviour
         switch (CurrMenu)
         {
             case Menu.None: ; break;
+            
             case Menu.StartScreen: startScreenController.SetActive(true); Manager.Instance.currentGameState = Manager.GameState.Menu;LoadLevel(0); break;
+            
             case Menu.AudioOptions: audioOptionsController.SetActive(true);Manager.Instance.currentGameState = Manager.GameState.Menu; break;
-            case Menu.LevelSelect: levelSelectController.SetActive(true);  UpdateLevelSelectStars();
-                Manager.Instance.currentGameState = Manager.GameState.Menu; break;
-            case Menu.Pause: break;
-            case Menu.Win: winScreenController.SetActive(true); winMessage.text = "You achieved " + (5 - Manager.Instance.Fails) + " Stars"; 
+            
+            case Menu.LevelSelect: levelSelectController.SetActive(true);  UpdateLevelSelectStars(); Manager.Instance.currentGameState = Manager.GameState.Menu; break;
+            
+            case Menu.Pause: pauseScreenController.SetActive(true); pauseMessage.text = "You are about to achieve " +(5 - Manager.Instance.Fails) + " Star(s)";
+                UpdateStars(-2,(5 - Manager.Instance.Fails));break;
+            
+            case Menu.Win: winScreenController.SetActive(true); winMessage.text = "You achieved " + (5 - Manager.Instance.Fails) + " Star(s)"; 
                 UpdateStars(-1,(5 - Manager.Instance.Fails));
                 break;
+            
             default: print(" Error, GameState does not exist");break;
         }
     }
@@ -140,10 +146,11 @@ public class UiManager : MonoBehaviour
 
     public void UpdateStars(int level, int stars)
     {
-        if(stars < 1){return;}
+        if(stars < 0){return;}
 
         GameObject targetLevel;
         if (level == -1) { targetLevel = winScreenController; }
+        else if (level == -2) { targetLevel = pauseScreenController; }
         else if(level > 0){targetLevel = levelOfLevelSelect[level-1];}
         else {return; }
 
@@ -166,4 +173,15 @@ public class UiManager : MonoBehaviour
     {
         LoadLevel(Manager.Instance.currentLevel);
     }
+
+    public void CloseGame() { Application.Quit(); }
+
+    public void ToggleTips(bool newState) { tipsController.SetActive(newState); }
+    
+    public void RestAllStars()
+    {
+        BrickSpawner.Instance.RestAllStarsData();
+        MenuChangeState(Menu.LevelSelect);
+    }
+
 }
