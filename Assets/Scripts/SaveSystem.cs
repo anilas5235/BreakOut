@@ -4,7 +4,6 @@ using System.Xml.Serialization;
 
 public class SaveSystem : MonoBehaviour
 {
-
     public static SaveSystem instance;
 
     private SaveData activeSave;
